@@ -5,6 +5,6 @@
 </div>
 
 <div mat-dialog-actions>
-      <button mat-raised-button cdkFocusInitial [mat-dialog-close]="false">Cancelar</button>
-      <button color="warn" mat-raised-button [mat-dialog-close]="true">Eliminar</button>
+      <button mat-raised-button cdkFocusInitial [mat-dialog-close]="false">Cancelar</button> <!--! Return false si cancela -->
+      <button color="warn" mat-raised-button [mat-dialog-close]="true">Eliminar</button> <!--? Return true si elimina -->
 </div>

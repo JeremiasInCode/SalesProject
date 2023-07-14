@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiclienteService } from '../services/apicliente.service';
-import { Response } from '../models/response';
-import { DialogClienteComponent } from './dialog/dialogcliente.component';
+import { DialogClienteComponent } from './dialog/DialogCliente.Component';
+
 import { MatDialog } from '@angular/material/dialog';
-import { Cliente } from '../models/cliente';
-import { DialogDeleteComponent } from '../common/delete/dialogdelete.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { AfterViewInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+
+import { Response } from '../models/response';
+import { Cliente } from '../models/cliente';
+import { DialogDeleteComponent } from '../common/delete/DialogDelete.Component';
 
 @Component({
   selector: 'app-cliente',
@@ -33,45 +39,51 @@ export class ClienteComponent implements OnInit{
     getClientes() {
         this.apiCliente.getClientes().subscribe(element => {
             this.lst = element.data
-        })
-    }
-
-    openAdd() {
-        const dialogRef = this.dialog.open(DialogClienteComponent, {
-            width: this.width
         });
-        dialogRef.afterClosed().subscribe(resut => {
-            this.getClientes();
-        })
     }
 
-    openEdit(cliente: Cliente) {
-        const dialogRef = this.dialog.open(DialogClienteComponent, {
+    EditCliente(client: Cliente, enterAnimationDuration: string, exitAnimationDuration: string) {
+        const DialogRef = this.dialog.open(DialogClienteComponent, {
             width: this.width,
-            data: cliente
-        });
-        dialogRef.afterClosed().subscribe(resut => {
-            this.getClientes();
+            enterAnimationDuration,
+            exitAnimationDuration,
+            data: client
+        })
+        DialogRef.afterClosed().subscribe(result => {
+            this.getClientes()
         })
     }
 
-    Delete(cliente: Cliente) {
-        const dialogRef = this.dialog.open(DialogDeleteComponent, {
-            width: this.width
-        });
-        dialogRef.afterClosed().subscribe(resut => {
-            // ! state of result
-            if (resut) {
-                this.apiCliente.delete(cliente.id).subscribe(response => {
-                    if (response.success == 1)
+    DeleteCliente(client: Cliente, enterAnimationDuration: string, exitAnimationDuration: string) {
+        const DialogRef = this.dialog.open(DialogDeleteComponent, {
+            width: this.width,
+            enterAnimationDuration,
+            exitAnimationDuration,
+        })
+        DialogRef.afterClosed().subscribe(result => {
+            if (result == true) 
+            {
+                this.apiCliente.delete(client.id).subscribe(response => {
+                    if (response)
                     {
                         this.snackBar.open('Cliente eliminado con exito', '', {
                             duration: 2000
-                        });
-                        this.getClientes();
+                        })
+                        this.getClientes()
                     }
-                });
+                })
             }
+        })
+    }
+
+    openAdd(enterAnimationDuration: string, exitAnimationDuration: string) : void {
+        const DialogRef = this.dialog.open(DialogClienteComponent, {
+            width: this.width,
+            enterAnimationDuration,
+            exitAnimationDuration,
+        });
+        DialogRef.afterClosed().subscribe(result => {
+            this.getClientes()
         })
     }
 }

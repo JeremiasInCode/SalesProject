@@ -16,7 +16,7 @@ const httpOption = {
 
 export class ApiclienteService {
 
-    url: string = 'https://localhost:7092/api/cliente';
+    url: string = 'https://localhost:7145/api/cliente';
 
     constructor(
         private _http: HttpClient
