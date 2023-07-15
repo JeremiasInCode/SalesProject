@@ -10,22 +10,24 @@ import { Login } from "../models/login";
 })
 
 export class apiAuthService {
-  url: string = "https://localhost:7145/api/User/login"
+  url: string = "https://localhost:7145/api/user/login"
   
   /*
   ! BehaviorSubject: Can receive a element since its creation.
   ! Subject: cannot.
   */
   private userSubject: BehaviorSubject<Usuario>
+  public user!: Observable<Usuario>
   //! property to get.
   public get usuarioData() : Usuario {
-    return this.userSubject.value
+    return this.userSubject.value //! obtener valor actual
   }
 
   constructor(private _http: HttpClient) {
     const storedUser = localStorage.getItem('usuario')
     const InitialUser = storedUser ? JSON.parse(storedUser) : null
     this.userSubject = new BehaviorSubject<Usuario>(InitialUser)
+    this.user = this.userSubject.asObservable(); //!ver datos y enterarse cuando cambia
   }
 
   login(login: Login) : Observable<Response> {

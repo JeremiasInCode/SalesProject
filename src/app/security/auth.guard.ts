@@ -14,13 +14,9 @@ export class AuthGaurd implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot) {
-      const UserState = this.authServiceUser.usuarioData;
-
-      if (UserState) {
-        return true
-      }
-
-      this.router.navigate(['/login'])
-      return false;
+      const usuario = this.authServiceUser.usuarioData
+      if (usuario) return true;
+      this.router.navigate(['/'])
+      return false
     }
 }
